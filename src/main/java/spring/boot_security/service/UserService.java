@@ -1,19 +1,16 @@
 package spring.boot_security.service;
 
-
-
-import spring.boot_security.model.User;
+import spring.boot_security.model.Person;
 
 import java.util.List;
 
 public interface UserService {
-    void add(User user);
 
-    List<User> listUsers();
+    List<Person> listUsers();
 
-    void saveUser(User user);
+    void saveUser(Person person);
 
-    User getUser(long id);
+    Person getUser(long id);
 
     void deleteUser(long id);
 }

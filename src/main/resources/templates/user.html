@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>People</title>
+</head>
+<body>
+<form th:action="@{/}">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">LastName</th>
+            <th scope="col">Mail</th>
+        </tr>
+        </thead>
+        <tr th:object="${person}">
+            <td th:text="${person.userName}"/>
+            <td th:text="${person.lastName}"/>
+            <td th:text="${person.email}"/>
+        </tr>
+            </table>
+    <br> <br>
+    <input type="button" value="Logout"
+           onclick="window.location.href =`/logout`  "/>
+
+</form>
+
+</body>
+
+</html>
