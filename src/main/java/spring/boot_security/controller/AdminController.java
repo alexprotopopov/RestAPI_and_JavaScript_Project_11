@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+
 import spring.boot_security.model.Person;
 import spring.boot_security.model.Role;
 import spring.boot_security.service.UserService;
 import spring.boot_security.repository.RoleRepository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -39,7 +39,7 @@ public class AdminController {
     @GetMapping(value = "/addNewUser")
     public String addNewUser(Model model) {
         model.addAttribute("person", new Person());
-        List<Role> roles = (List<Role>) roleRepository.findAll();
+        List<Role> roles = roleRepository.findAll();
         model.addAttribute("allRoles", roles);
         return "admin/user-info";
     }
@@ -55,7 +55,7 @@ public class AdminController {
         model.addAttribute("id", id);
         Person person = userService.getUser(id);
         model.addAttribute("person", person);
-        List<Role> roles = (List<Role>) roleRepository.findAll();
+        List<Role> roles = roleRepository.findAll();
         model.addAttribute("allRoles", roles);
         return "admin/user-info";
     }
