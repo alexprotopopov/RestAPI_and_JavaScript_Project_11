@@ -10,10 +10,13 @@ import spring.boot_security.model.Role;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+
 @Data
 public class PersonDetails implements UserDetails {
+
     private final Person person;
 
+    //Нужно для получения данных аутентифицированного пользователя
     public PersonDetails(Person person) {
         this.person = person;
     }
@@ -22,6 +25,7 @@ public class PersonDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return mapRolesToAuthorities(person.getRoles());
     }
+
     public static Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> role) {
         return role.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
@@ -33,7 +37,7 @@ public class PersonDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.person.getUserName();
+        return this.person.getUsername();
     }
 
     @Override
@@ -55,9 +59,6 @@ public class PersonDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    //Нужно для получения данных аутифицированного пользователя
-    public Person getPerson() {
-        return this.person;
-    }
 }
+
+

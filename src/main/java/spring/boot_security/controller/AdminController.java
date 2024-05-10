@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import spring.boot_security.model.Person;
 import spring.boot_security.model.Role;
+import spring.boot_security.service.RoleService;
 import spring.boot_security.service.UserService;
-import spring.boot_security.repository.RoleRepository;
 
 import java.util.List;
 
@@ -20,14 +20,14 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final UserService userService;
 
 
     @Autowired
-    public AdminController(UserService userService, RoleRepository roleRepository) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     @GetMapping
@@ -39,7 +39,7 @@ public class AdminController {
     @GetMapping(value = "/addNewUser")
     public String addNewUser(Model model) {
         model.addAttribute("person", new Person());
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleService.listRole();
         model.addAttribute("allRoles", roles);
         return "admin/user-info";
     }
@@ -55,7 +55,7 @@ public class AdminController {
         model.addAttribute("id", id);
         Person person = userService.getUser(id);
         model.addAttribute("person", person);
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleService.listRole();
         model.addAttribute("allRoles", roles);
         return "admin/user-info";
     }
