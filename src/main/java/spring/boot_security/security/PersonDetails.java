@@ -17,10 +17,6 @@ public class PersonDetails implements UserDetails {
     private final Person person;
 
     //Нужно для получения данных аутентифицированного пользователя
-    public PersonDetails(Person person) {
-        this.person = person;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return mapRolesToAuthorities(person.getRoles());

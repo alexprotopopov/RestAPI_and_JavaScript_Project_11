@@ -3,8 +3,9 @@ package spring.boot_security.service;
 import spring.boot_security.model.Person;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface UserService {
+public interface PersonService {
 
     List<Person> listUsers();
 
@@ -13,4 +14,7 @@ public interface UserService {
     Person getUser(long id);
 
     void deleteUser(long id);
+
+    Optional<Person> findByUserName(String email);
+    void updatePerson (Person updatePerson, long id);
 }

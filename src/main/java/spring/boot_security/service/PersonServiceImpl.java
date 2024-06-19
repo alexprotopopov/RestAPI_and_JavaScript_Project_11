@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonDetailsService implements UserDetailsService, UserService {
+public class PersonServiceImpl implements UserDetailsService, PersonService {
 
-    private BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final PersonRepository personRepository;
 
     @Autowired
-    public PersonDetailsService(PersonRepository personRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
+    public PersonServiceImpl(PersonRepository personRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -34,7 +34,7 @@ public class PersonDetailsService implements UserDetailsService, UserService {
 
     @Transactional
     @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Person> person = personRepository.findByUsername(username);
         if (person.isEmpty()) throw new UsernameNotFoundException("User not found!");
         return new User(person.get().getUsername(), person.get().getPassword(), PersonDetails.mapRolesToAuthorities(person.get().getRoles()));
@@ -63,6 +63,23 @@ public class PersonDetailsService implements UserDetailsService, UserService {
     public void saveUser(Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         personRepository.save(person);
+    }
+
+    @Override
+    @Transactional
+    public void updatePerson(Person updatePerson, long id) {
+        Person personBD = personRepository.findById(id).get();
+        personBD.setFirstName(updatePerson.getFirstName());
+        personBD.setLastName(updatePerson.getLastName());
+        personBD.setAge(updatePerson.getAge());
+        personBD.setUsername(updatePerson.getUsername());
+        personBD.setRoles(updatePerson.getRoles());
+        if (personBD.getPassword().equals(updatePerson.getPassword())) {
+            personRepository.save(personBD);
+        } else {
+            personBD.setPassword(passwordEncoder.encode(updatePerson.getPassword()));
+            personRepository.save(personBD);
+        }
     }
 }
 
