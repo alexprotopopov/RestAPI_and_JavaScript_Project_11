@@ -12,6 +12,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -38,6 +39,7 @@ public class Person {
 
 
     @Column(name = "age", length = 3)
+    @Min(value = 0)
     private int age;
 
     @NotEmpty
@@ -50,12 +52,13 @@ public class Person {
     private String password;
 
 
-    public Person(String firstName, String lastName, String username, String password, int age) {
+    public Person(String firstName, String lastName, String username, String password, int age, Set<Role> roles ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.age = age;
+        this.roles=roles;
     }
 
     public Person() {

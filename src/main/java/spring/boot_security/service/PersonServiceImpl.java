@@ -2,6 +2,7 @@ package spring.boot_security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -67,7 +68,7 @@ public class PersonServiceImpl implements UserDetailsService, PersonService {
 
     @Override
     @Transactional
-    public void updatePerson(Person updatePerson, long id) {
+    public Person updatePerson(Person updatePerson, long id) {
         Person personBD = personRepository.findById(id).get();
         personBD.setFirstName(updatePerson.getFirstName());
         personBD.setLastName(updatePerson.getLastName());
@@ -80,6 +81,7 @@ public class PersonServiceImpl implements UserDetailsService, PersonService {
             personBD.setPassword(passwordEncoder.encode(updatePerson.getPassword()));
             personRepository.save(personBD);
         }
+        return personBD;
     }
 }
 

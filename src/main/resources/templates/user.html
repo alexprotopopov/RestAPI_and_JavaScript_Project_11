@@ -1,93 +1,74 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin panel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>User</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
-<body>
-<header>
-    <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
-        <div class="container-fluid text-white">
-                <span class="navbar-header">
-                  <strong><span th:text="${currentPerson.getUsername}"></span></strong>
-                  <span> with roles: </span>
-                    <span th:each="role : ${currentPerson.getRoles()}"
-                          th:text="${role.toString().replace('ROLE_', '')+ '&nbsp&nbsp'}"> </span>
-                                            </span>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
-            </ul>
-        </div>
 
-    </nav>
-
-</header>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-<div class="d-flex align-items-start">
-    <!--align-items-start - выравнивание по горизонтали. start - это по верху-->
-
-    <div class="col-2">
-
-        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
-             aria-orientation="vertical">
-            <button class="nav-link active" id="v-pills-user-tab" data-bs-toggle="pill"
-                    data-bs-target="#v-pills-user"
-                    type="button" role="tab" aria-controls="v-pills-user" aria-selected="true" style="display: flex;
-   justify-content:left;"> User
-            </button>
-        </div>
+<body style="height: 100vh">
+<nav class="navbar navbar-dark bg-dark">
+    <div class="col-11 text-white">
+        <h4><span id="navbar-email"></span> <span> with role: </span> <span id="navbar-roles"></span></h4>
     </div>
+    <div class="col-1">
+        <a class="btn-link text-secondary" href="/logout" type="submit">Logout</a>
+    </div>
+</nav>
 
-    <div class="col-9 bg-light">
-        <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-admin" role="tabpanel"
-                 aria-labelledby="v-pills-admin-tab">
-                <p class="fw-bold fs-2">User information-page</p>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Surname</th>
-                        <th>Age</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td th:text="${currentPerson.getId()}"/>
-                        <td th:text="${currentPerson.getUsername()}"/>
-                        <td th:text="${currentPerson.getLastName()}"/>
-                        <td th:text="${currentPerson.getAge()}"/>
-                        <td th:text="${currentPerson.getUsername()}"/>
-                        <td>
-                                        <span th:each="role : ${currentPerson.getRoles()}"
-                                              th:switch="${role.getName()}">
-                                                <span th:case="'ROLE_ADMIN'">ADMIN</span>
-                                                <span th:case="'ROLE_USER'">USER</span>
-                                        </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+<div class="container-fluid h-100 p-0">
+    <div class="row h-100 m-0">
+        <div class="col-2 p-0">
+            <nav class="nav flex-column nav-pills">
+                <br>
+                <a class="nav-link active" data-toggle="tab" href="/user"
+                   aria-controls="UserInfo">User</a>
+            </nav>
+        </div>
+        <div class="col-10 bg-light tab-content">
+            <div class="collapse multi-collapse fade show active" id="UserInfo">
+
+                <br>
+                <h1>User information-page</h1>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="h5">About user</span>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="CurrentUser">
+                            <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+        integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+        crossorigin="anonymous"></script>
+
+<!--<script src="/static/js/admin2.js"></script>-->
+<script src="/static/js/user.js"></script>
 </body>
-</html>
 </html>
