@@ -1,32 +1,43 @@
-async function newUser() {
-    const formAddNewUser = document.forms['formNew']
-    formAddNewUser.addEventListener('userAddBtn', function (event) {
-        event.preventDefault()
-        let rolesNewUser = []
+document.addEventListener('DOMContentLoaded', function () {
+    newUserFunction();
+});
+
+async function newUserFunction() {
+    const formAddNewUser = document.forms['formNew'];
+    formAddNewUser.addEventListener('submit', function (event) {
+        event.preventDefault();
+        let rolesNewUser = [];
         for (let i = 0; i < formAddNewUser.rolesNewUser.options.length; i++) {
             if (formAddNewUser.rolesNewUser.options[i].selected) {
                 rolesNewUser.push({
-                    id: formAddNewUser.rolesNewUser.options[i].value,
-                    name: "ROLE_" + formAddNewUser.rolesNewUser.options[i].text
-                })
-                break
-            }}
+                    id: parseInt(formAddNewUser.rolesNewUser.options[i].value),
+                    name: "ROLE_" + formAddNewUser.rolesNewUser.options[i].text,
+                    authority: "ROLE_" + formAddNewUser.rolesNewUser.options[i].text
+                });
+                break;
+            }
+        }
         const newUser = {
-            firstname: formAddNewUser.querySelector('#NewUserName').value,
-            lastname: formAddNewUser.querySelector('#NewLastName').value,
+            firstName: formAddNewUser.querySelector('#NewUserName').value,
+            lastName: formAddNewUser.querySelector('#NewLastName').value,
             age: parseInt(formAddNewUser.querySelector('#NewUserAge').value, 10),
-            email: formAddNewUser.querySelector('#NewUserEmail').value,
+            username: formAddNewUser.querySelector('#NewUserEmail').value,
             password: formAddNewUser.querySelector('#NewUserPass').value,
-            role: rolesNewUser        }
+            roles: rolesNewUser
+        };
+        console.log('Sending user data:', JSON.stringify(newUser));
         fetch('/api/admin/save_person', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(newUser)
-        }).then(() => {
-            formAddNewUser.reset()
+        }).then(response => {
+            if (!response.ok) {
+            throw new Error('Ошибка ввода данных');
+        }
+            formAddNewUser.reset();
             $('#nav-users_table-tab').click();
-            allUsers()
-            console.log(newUser)
+            allUsers();
+            console.log(newUser);
         })
-    })
+    });
 }
