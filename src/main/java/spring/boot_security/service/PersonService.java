@@ -16,5 +16,5 @@ public interface PersonService {
 
     //Optional<Person> findByUserName(String email);
 
-    Person updatePerson(Person updatePerson, long id);
+    void updatePerson(Person updatePerson, long id);
 }

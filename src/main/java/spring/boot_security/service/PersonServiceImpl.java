@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonServiceImpl  implements UserDetailsService, PersonService {
+public class PersonServiceImpl  implements PersonService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final PersonRepository personRepository;
@@ -26,14 +26,6 @@ public class PersonServiceImpl  implements UserDetailsService, PersonService {
     public PersonServiceImpl(PersonRepository personRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Transactional
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Person> person = personRepository.findByUsername(username);
-        if (person.isEmpty()) throw new UsernameNotFoundException("User not found!");
-        return new User(person.get().getUsername(), person.get().getPassword(), PersonDetails.mapRolesToAuthorities(person.get().getRoles()));
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +55,7 @@ public class PersonServiceImpl  implements UserDetailsService, PersonService {
 
     @Override
     @Transactional
-    public Person updatePerson(Person updatePerson, long id) {
+    public void updatePerson(Person updatePerson, long id) {
         Person personBD = personRepository.findById(id).get();
         personBD.setFirstName(updatePerson.getFirstName());
         personBD.setLastName(updatePerson.getLastName());
@@ -76,7 +68,6 @@ public class PersonServiceImpl  implements UserDetailsService, PersonService {
             personBD.setPassword(passwordEncoder.encode(updatePerson.getPassword()));
             personRepository.save(personBD);
         }
-        return personBD;
     }
 }
 
