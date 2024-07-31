@@ -2,7 +2,6 @@ package spring.boot_security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonServiceImpl implements UserDetailsService, PersonService {
+public class PersonServiceImpl  implements UserDetailsService, PersonService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final PersonRepository personRepository;
@@ -27,10 +26,6 @@ public class PersonServiceImpl implements UserDetailsService, PersonService {
     public PersonServiceImpl(PersonRepository personRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public Optional<Person> findByUserName(String username) {
-        return personRepository.findByUsername(username);
     }
 
     @Transactional
@@ -47,7 +42,7 @@ public class PersonServiceImpl implements UserDetailsService, PersonService {
         return personRepository.findAll();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Person getUser(long id) {
         return personRepository.findById(id).get();

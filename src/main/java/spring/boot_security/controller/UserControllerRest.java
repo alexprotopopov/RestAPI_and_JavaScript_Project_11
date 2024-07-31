@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.boot_security.model.Person;
-import spring.boot_security.service.PersonService;
+
+import spring.boot_security.security.SecurityUserService;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -15,16 +16,20 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/user")
 public class UserControllerRest {
-
-    private final PersonService personService;
+private final SecurityUserService securityUserService;
 
     @Autowired
-    public UserControllerRest(PersonService personService) {
-        this.personService = personService;
+    public UserControllerRest(SecurityUserService securityUserService) {
+        this.securityUserService = securityUserService;
     }
 
     @GetMapping
     public ResponseEntity<Optional<Person>> userInfo(Principal principal) {
-        return new ResponseEntity<>(personService.findByUserName(principal.getName()), HttpStatus.OK);
+        Optional<Person> person = securityUserService.findByUserName(principal.getName());
+        if (person.isPresent()) {
+            return new ResponseEntity<>(person, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
+        }
     }
 }
